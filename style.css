@@ -1,24 +1,18 @@
 .container {
-  width: 800px;
+  width: 400px;
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-  border: 0.5rem solid #333;
+  grid-template-columns: repeat(4, 100px);
+  grid-template-rows: repeat(4, 100px);
+  border: solid #333;
+  font-size: 100px;
 }
 
 .white {
-    height: 100px;
-    width: 100px;
-    background-color: black;
-    font-size: 100px;
-
+  background-color: white;
 }
 
 .black {
-    height: 100px;
-    width: 100px;
-    background-color: white;
-    font-size: 100px;
+  background-color: black;
 }
 
 .column {
@@ -34,7 +28,7 @@
 }
 
 @media screen and (max-width: 600px) {
-  .column, .left, .right, .middle {
+  .left, .right, .middle {
     width: 100%;
   }
 }
