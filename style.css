@@ -1,3 +1,11 @@
+body {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: auto;
+}
+
 .container {
   width: 400px;
   display: grid;
@@ -5,6 +13,8 @@
   grid-template-rows: repeat(4, 100px);
   border: solid #333;
   font-size: 100px;
+  text-align: center;
+
 }
 
 .white {
@@ -12,7 +22,7 @@
 }
 
 .black {
-  background-color: black;
+  background-color: #7FFFD4;
 }
 
 .column {
