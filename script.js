@@ -79,3 +79,55 @@ function solveNQueen(){
     return true
 }
 
+
+
+
+var slider = document.getElementById("myRange");
+var output = document.getElementById("value");
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  output.textContent = "N = " + this.value
+  changeN(this.value)
+}
+
+
+function changeN(value) {
+    let board = document.getElementById("board")
+    switch (value) {
+        case "5":
+            board.style.gridTemplateColumns = "repeat(5, 160px)" 
+            board.style.gridTemplateRows = "repeat(5, 160px)" 
+        break;
+
+        case "6":
+            board.style.gridTemplateColumns = "repeat(6, 133px)" 
+            board.style.gridTemplateRows = "repeat(6, 133px)" 
+        break; 
+
+        case "7":
+            board.style.gridTemplateColumns = "repeat(7, 114px)" 
+            board.style.gridTemplateRows = "repeat(7, 114px)" 
+        break;
+
+        case "8":
+            board.style.gridTemplateColumns = "repeat(8, 100px)" 
+            board.style.gridTemplateRows = "repeat(8, 100px)" 
+        break;
+
+        case "9":
+            board.style.gridTemplateColumns = "repeat(9, 89px)" 
+            board.style.gridTemplateRows = "repeat(9, 89px)" 
+        break;
+
+        case "10":
+            board.style.gridTemplateColumns = "repeat(10, 80px)" 
+            board.style.gridTemplateRows = "repeat(10, 80px)" 
+        break;
+
+        default:
+            board.style.gridTemplateColumns = "repeat(4, 200px)" 
+            board.style.gridTemplateRows = "repeat(4, 200px)" 
+        break ;
+    }
+}

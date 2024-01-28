@@ -17,10 +17,10 @@
                 sí, es decir, dos reinas no pueden estar en la misma fila, columna o diagonal.</p>
         </div>
         
-        <div class="container column">
+        <div id="board" class="container column">
             <div class="white" id="0"></div>
             <div class="black" id="1"></div>
-            <div class="white" id="2"></div>
+            <div style="font-size:100%" class="white" id="2"></div>
             <div class="black" id="3"></div>
             <div class="black" id="4"></div>
             <div class="white" id="5"></div>
@@ -38,9 +38,12 @@
 
 
         <div class="column right">
-            <h2>Botones etc</h2>  
-            <p>4, 5, 6, 7, 8, 9 y 10 reinas</p> 
-            <input id="clickMe" type="button" value="clickme" onclick="solveNQueen()" />
+            <h2>Configure el valor de N</h2>   
+            <div class="slidecontainer">
+                <input type="range" min="4" max="10" value="4" class="slider" id="myRange">
+            </div>
+            <p id="value">N = 4</p>
+            <input id="clickMe" type="button" value="Resolver" onclick="solveNQueen()" />
         </div>
     </div>
 
