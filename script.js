@@ -9,9 +9,93 @@ const queenpass = async () => {
     }
 }
 
-//queenpass()
 
 let N = 4
+var board = [];
+var boardElement = document.getElementById("board");
+isBoardClean = true
+
+function modifyBoard(N){
+    boardElement.textContent = ''
+    board = []
+    for(var y = 0; y < N; y++){
+        var row = new Array(N);
+        for(var x = 0; x < N; x++){
+            var cell = {};
+            cell.element = document.createElement("div")
+            cell.element.id = y*N + x; 
+            if(y%2 ==  x%2)
+            {
+                cell.element.className = "white";
+            }
+            else 
+            {
+                cell.element.className = "black";
+            }
+            boardElement.appendChild(cell.element);
+            row[x] = 0;
+        }
+        board.push(row)
+    }
+}
+
+var slider = document.getElementById("myRange");
+var output = document.getElementById("value");
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  output.textContent = "N = " + this.value
+  N = this.value
+  changeN(this.value)
+  modifyBoard(this.value)
+}
+
+
+function changeN(value) {
+    let board = document.getElementById("board")
+    switch (value) {
+        case "5":
+            board.style.gridTemplateColumns = "repeat(5, 160px)" 
+            board.style.gridTemplateRows = "repeat(5, 160px)" 
+        break;
+
+        case "6":
+            board.style.gridTemplateColumns = "repeat(6, 133px)" 
+            board.style.gridTemplateRows = "repeat(6, 133px)" 
+        break; 
+
+        case "7":
+            board.style.gridTemplateColumns = "repeat(7, 114px)" 
+            board.style.gridTemplateRows = "repeat(7, 114px)" 
+        break;
+
+        case "8":
+            board.style.gridTemplateColumns = "repeat(8, 100px)" 
+            board.style.gridTemplateRows = "repeat(8, 100px)" 
+        break;
+
+        case "9":
+            board.style.gridTemplateColumns = "repeat(9, 89px)" 
+            board.style.gridTemplateRows = "repeat(9, 89px)" 
+        break;
+
+        case "10":
+            board.style.gridTemplateColumns = "repeat(10, 80px)" 
+            board.style.gridTemplateRows = "repeat(10, 80px)" 
+        break;
+
+        default:
+            board.style.gridTemplateColumns = "repeat(4, 200px)" 
+            board.style.gridTemplateRows = "repeat(4, 200px)" 
+        break ;
+    }
+}
+changeN(4)
+modifyBoard(4)
+
+function cleanBoard(){
+
+}
  
 function printSolution(board)
 {
@@ -20,7 +104,7 @@ function printSolution(board)
         for(let j = 0; j < N; j++)
         {
             if(board[i][j] == 1){
-                let test = document.getElementById(i*4 + j)
+                let test = document.getElementById(i*N + j)
                 test.textContent = "\u265B"
             }
         }
@@ -65,69 +149,13 @@ function solveNQUtil(board, col){
 }
  
 function solveNQueen(){
-    let board =[[0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0]]
-
+    if (!isBoardClean) modifyBoard(N);
     if(solveNQUtil(board, 0) == false){
         console.log("Solution does not exist")
         return false
     }
 
     printSolution(board)
+    isBoardClean = false
     return true
-}
-
-
-
-
-var slider = document.getElementById("myRange");
-var output = document.getElementById("value");
-
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-  output.textContent = "N = " + this.value
-  changeN(this.value)
-}
-
-
-function changeN(value) {
-    let board = document.getElementById("board")
-    switch (value) {
-        case "5":
-            board.style.gridTemplateColumns = "repeat(5, 160px)" 
-            board.style.gridTemplateRows = "repeat(5, 160px)" 
-        break;
-
-        case "6":
-            board.style.gridTemplateColumns = "repeat(6, 133px)" 
-            board.style.gridTemplateRows = "repeat(6, 133px)" 
-        break; 
-
-        case "7":
-            board.style.gridTemplateColumns = "repeat(7, 114px)" 
-            board.style.gridTemplateRows = "repeat(7, 114px)" 
-        break;
-
-        case "8":
-            board.style.gridTemplateColumns = "repeat(8, 100px)" 
-            board.style.gridTemplateRows = "repeat(8, 100px)" 
-        break;
-
-        case "9":
-            board.style.gridTemplateColumns = "repeat(9, 89px)" 
-            board.style.gridTemplateRows = "repeat(9, 89px)" 
-        break;
-
-        case "10":
-            board.style.gridTemplateColumns = "repeat(10, 80px)" 
-            board.style.gridTemplateRows = "repeat(10, 80px)" 
-        break;
-
-        default:
-            board.style.gridTemplateColumns = "repeat(4, 200px)" 
-            board.style.gridTemplateRows = "repeat(4, 200px)" 
-        break ;
-    }
 }
