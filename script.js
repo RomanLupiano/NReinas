@@ -1,18 +1,6 @@
-const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
-
-const queenpass = async () => {
-    for (let index = 0; index < 16; index++) {
-        let test = document.getElementById(index)
-        test.textContent = "\u265B"
-        await sleep(1000);
-        test.textContent = ""
-    }
-}
-
-
 let N = 4
-var board = [];
-var boardElement = document.getElementById("board");
+let board = [];
+let boardElement = document.getElementById("board");
 isBoardClean = true
 
 function modifyBoard(N){
@@ -39,19 +27,7 @@ function modifyBoard(N){
     }
 }
 
-var slider = document.getElementById("myRange");
-var output = document.getElementById("value");
-
-// Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-  output.textContent = "N = " + this.value
-  N = this.value
-  changeN(this.value)
-  modifyBoard(this.value)
-}
-
-
-function changeN(value) {
+function modifyGrid(value) {
     let board = document.getElementById("board")
     switch (value) {
         case "5":
@@ -90,13 +66,23 @@ function changeN(value) {
         break ;
     }
 }
-changeN(4)
-modifyBoard(4)
 
-function cleanBoard(){
+var slider = document.getElementById("myRange");
+var output = document.getElementById("value");
 
+slider.oninput = function() {
+  output.textContent = "N = " + this.value
+  N = this.value
+  modifyGrid(this.value)
+  modifyBoard(this.value)
 }
+
+//Default status
+modifyGrid(4)
+modifyBoard(4)
  
+
+
 function printSolution(board)
 {
     for(let i = 0; i < N; i++)
