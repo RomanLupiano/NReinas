@@ -3,7 +3,7 @@ let board = [];
 let boardElement = document.getElementById("board");
 isBoardClean = true
 
-function modifyBoard(N){
+function modifyBoard(){
     boardElement.textContent = ''
     board = []
     for(var y = 0; y < N; y++){
@@ -12,6 +12,9 @@ function modifyBoard(N){
             var cell = {};
             cell.element = document.createElement("div")
             cell.element.id = y*N + x; 
+            cell.element.addEventListener('click', function() {
+                cellClicked(this.id)
+            });
             if(y%2 ==  x%2)
             {
                 cell.element.className = "white";
@@ -27,44 +30,22 @@ function modifyBoard(N){
     }
 }
 
-function modifyGrid(value) {
-    let board = document.getElementById("board")
-    switch (value) {
-        case "5":
-            board.style.gridTemplateColumns = "repeat(5, 160px)" 
-            board.style.gridTemplateRows = "repeat(5, 160px)" 
-        break;
-
-        case "6":
-            board.style.gridTemplateColumns = "repeat(6, 133px)" 
-            board.style.gridTemplateRows = "repeat(6, 133px)" 
-        break; 
-
-        case "7":
-            board.style.gridTemplateColumns = "repeat(7, 114px)" 
-            board.style.gridTemplateRows = "repeat(7, 114px)" 
-        break;
-
-        case "8":
-            board.style.gridTemplateColumns = "repeat(8, 100px)" 
-            board.style.gridTemplateRows = "repeat(8, 100px)" 
-        break;
-
-        case "9":
-            board.style.gridTemplateColumns = "repeat(9, 89px)" 
-            board.style.gridTemplateRows = "repeat(9, 89px)" 
-        break;
-
-        case "10":
-            board.style.gridTemplateColumns = "repeat(10, 80px)" 
-            board.style.gridTemplateRows = "repeat(10, 80px)" 
-        break;
-
-        default:
-            board.style.gridTemplateColumns = "repeat(4, 200px)" 
-            board.style.gridTemplateRows = "repeat(4, 200px)" 
-        break ;
+function cellClicked(id){
+    cell = document.getElementById(id)
+    if (cell.textContent == "") {
+        cell.textContent = "\u265B"
+        board[Math.floor(id/N)][id%N] = 1
+    } else {
+        cell.textContent = ""
+        board[Math.floor(id/N)][id%N] = 0
     }
+    console.table(board)
+}
+
+function modifyGrid() {
+    let board = document.getElementById("board")
+    board.style.gridTemplateColumns = "repeat("+ N +", " + 800/N + "px)" 
+    board.style.gridTemplateRows = "repeat("+ N +", " + 800/N + "px)" 
 }
 
 var slider = document.getElementById("myRange");
@@ -73,15 +54,14 @@ var output = document.getElementById("value");
 slider.oninput = function() {
   output.textContent = "N = " + this.value
   N = this.value
-  modifyGrid(this.value)
-  modifyBoard(this.value)
+  modifyGrid()
+  modifyBoard()
 }
 
 //Default status
-modifyGrid(4)
-modifyBoard(4)
+modifyGrid()
+modifyBoard()
  
-
 
 function printSolution(board)
 {
@@ -135,13 +115,14 @@ function solveNQUtil(board, col){
 }
  
 function solveNQueen(){
-    if (!isBoardClean) modifyBoard(N);
     if(solveNQUtil(board, 0) == false){
-        console.log("Solution does not exist")
+        alert("No existe solución");
         return false
     }
 
     printSolution(board)
+    console.table(board)
+
     isBoardClean = false
     return true
 }
