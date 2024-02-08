@@ -4,7 +4,7 @@ let boardElement = document.getElementById("board");
 isBoardClean = true
 isSolving = false
 animationTime = 200
-var audioSuccess = new Audio('/media/success.mp3'); //Sound Effect from Pixabay
+var audioSuccess = new Audio('./media/success.mp3'); //Sound Effect from Pixabay
 
 
 
