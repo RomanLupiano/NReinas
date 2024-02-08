@@ -2,6 +2,11 @@ let N = 4
 let board = [];
 let boardElement = document.getElementById("board");
 isBoardClean = true
+isSolving = false
+animationTime = 200
+var audioSuccess = new Audio('/media/success.mp3'); //Sound Effect from Pixabay
+
+
 
 function modifyBoard(){
     boardElement.textContent = ''
@@ -46,17 +51,27 @@ function modifyGrid() {
     let board = document.getElementById("board")
     board.style.gridTemplateColumns = "repeat("+ N +", " + 800/N + "px)" 
     board.style.gridTemplateRows = "repeat("+ N +", " + 800/N + "px)" 
+    board.style.fontSize = 800/N + "px"
 }
 
-var slider = document.getElementById("myRange");
-var output = document.getElementById("value");
+var Nslider = document.getElementById("Nslider");
+var Noutput = document.getElementById("Nvalue");
 
-slider.oninput = function() {
-  output.textContent = "N = " + this.value
+var timeSlider = document.getElementById("timeSlider");
+var timeOutput = document.getElementById("timeValue");
+
+
+Nslider.oninput = function() {
+Noutput.textContent = "N = " + this.value
   N = this.value
   modifyGrid()
   modifyBoard()
 }
+
+timeSlider.oninput = function() {
+    timeOutput.textContent = "Time = " + this.value + "ms"
+    animationTime = this.value
+  }
 
 //Default status
 modifyGrid()
@@ -95,34 +110,47 @@ function isSafe(board, row, col)
     return true
 }
  
-function solveNQUtil(board, col){
-    if(col >= N)
-        return true
- 
-    for(let i=0;i<N;i++){
- 
-        if(isSafe(board, i, col)==true){
-             
-            board[i][col] = 1
- 
-            if(solveNQUtil(board, col + 1) == true)
-                return true
-
-            board[i][col] = 0
-        }
-    }
-    return false
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+async function solveNQUtil(board, col) {
+    if (col >= N)
+        return true;
+
+    for (let i = 0; i < N; i++) {
+        let test = document.getElementById(i * N + col);
+        test.textContent = "\u265B";
+        await sleep(animationTime); // Espera 1 segundo antes de continuar
+
+        if (isSafe(board, i, col) == true) {
+            board[i][col] = 1;
+
+            if (await solveNQUtil(board, col + 1) == true) {
+                audioSuccess.play()
+                return true;
+            }
+
+            board[i][col] = 0;
+        }
+        
+        test.textContent = " ";
+    }
+    return false;
+}
+
  
 function solveNQueen(){
+    if (!isBoardClean) modifyBoard()
     if(solveNQUtil(board, 0) == false){
         alert("No existe solución");
         return false
     }
 
+
     printSolution(board)
-    console.table(board)
 
     isBoardClean = false
+    
     return true
 }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Problema de las N Reinas</title>
-    <link rel="icon" type="image/x-icon" href="/media/icon.ico">
+    <link rel="icon" type="image/x-icon" href="/media/queen.ico">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,6 +15,8 @@
             <h2>¿Cuál es el problema de las N reinas?</h2>
             <p>El problema trata de ubicar un número N de reinas en un tablero de N x N de manera tal que no se ataquen entre
                 sí, es decir, dos reinas no pueden estar en la misma fila, columna o diagonal.</p>
+            <p>En esta página puedes ver como el algoritmo de backtracking intenta encontrar una solución.</p>
+            <p>También haciendo click en los casilleros puedes agregar reinas para intentar encontrar una solución</p>
         </div>
         
         <div id="board" class="container column">
@@ -23,16 +25,23 @@
 
 
         <div class="column right">
-            <h2>Configure el valor de N</h2>   
+            <h2>Configuración</h2>  
+            <p>Valor de N</p> 
             <div class="slidecontainer">
-                <input type="range" min="4" max="10" value="4" class="slider" id="myRange">
+                <input type="range" min="4" max="10" value="4" class="slider" id="Nslider">
             </div>
-            <p id="value">N = 4</p>
-            <input id="clickMe" type="button" value="Resolver" onclick="solveNQueen()" />
+            <p id="Nvalue">N = 4</p>
+            <p>Tiempo de animación</p> 
+            <div class="slidecontainer">
+                <input type="range" min="10" max="1000" value="300" class="slider" id="timeSlider">
+            </div>
+            <p id="timeValue">Time = 300ms</p>
+            <input id="solve" type="button" value="Resolver" onclick="solveNQueen()" />
+            <input id="clean" type="button" value="Limpiar tablero" onclick="modifyBoard()" />
+
         </div>
     </div>
 
-    
     <script src="script.js"></script>
 
 </body>

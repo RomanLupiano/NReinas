@@ -4,7 +4,6 @@
   grid-template-columns: repeat(4, 200px);
   grid-template-rows: repeat(4, 200px);
   border: solid #333;
-  font-size: 100px;
   text-align: center;
 }
 
@@ -22,6 +21,7 @@
 
 .left, .right {
   width: 25%;
+  margin: 10px 10px 10px;
 }
 
 .middle {
