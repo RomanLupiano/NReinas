@@ -9,22 +9,13 @@
 </head>
 <body>
 
-    <div class="row">
-
         <div class="column left">
             <h2>¿Cuál es el problema de las N reinas?</h2>
             <p>El problema trata de ubicar un número N de reinas en un tablero de N x N de manera tal que no se ataquen entre
                 sí, es decir, dos reinas no pueden estar en la misma fila, columna o diagonal.</p>
             <p>En esta página puedes ver como el algoritmo de backtracking intenta encontrar una solución.</p>
             <p>También haciendo click en los casilleros puedes agregar reinas para intentar encontrar una solución</p>
-        </div>
-        
-        <div id="board" class="container column">
-            
-        </div>
 
-
-        <div class="column right">
             <h2>Configuración</h2>  
             <p>Valor de N</p> 
             <div class="slidecontainer">
@@ -40,7 +31,10 @@
             <input id="clean" type="button" value="Limpiar tablero" onclick="modifyBoard()" />
 
         </div>
-    </div>
+        
+        <div id="board" class="container column">
+            
+        </div>
 
     <script src="script.js"></script>
 

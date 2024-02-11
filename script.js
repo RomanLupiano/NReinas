@@ -48,10 +48,10 @@ function cellClicked(id){
 }
 
 function modifyGrid() {
-    let board = document.getElementById("board")
-    board.style.gridTemplateColumns = "repeat("+ N +", " + 800/N + "px)" 
-    board.style.gridTemplateRows = "repeat("+ N +", " + 800/N + "px)" 
-    board.style.fontSize = 800/N + "px"
+    let size = boardElement.offsetWidth - 6
+    boardElement.style.gridTemplateColumns = "repeat("+ N +", " + size/N + "px)" 
+    boardElement.style.gridTemplateRows = "repeat("+ N +", " + size/N + "px)" 
+    boardElement.style.fontSize = size/N + "px"
 }
 
 var Nslider = document.getElementById("Nslider");
@@ -77,6 +77,10 @@ timeSlider.oninput = function() {
 modifyGrid()
 modifyBoard()
  
+addEventListener("resize", (event) => {});
+
+onresize = (event) => {modifyGrid()};
+
 
 function printSolution(board)
 {
