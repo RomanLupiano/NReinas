@@ -1,10 +1,13 @@
 let N = 4
 let board = [];
 let boardElement = document.getElementById("board");
+let btnSolve = document.getElementById("solve");
+let btnClean = document.getElementById("clean");
 isBoardClean = true
 isSolving = false
 animationTime = 200
 var audioSuccess = new Audio('./media/success.mp3'); //Sound Effect from Pixabay
+var audioError = new Audio('./media/error.wav');
 
 
 
@@ -38,13 +41,14 @@ function modifyBoard(){
 function cellClicked(id){
     cell = document.getElementById(id)
     if (cell.textContent == "") {
+        cell.style.color = "#FF0000"
         cell.textContent = "\u265B"
         board[Math.floor(id/N)][id%N] = 1
     } else {
+        cell.style.color = ""
         cell.textContent = ""
         board[Math.floor(id/N)][id%N] = 0
     }
-    console.table(board)
 }
 
 function modifyGrid() {
@@ -131,7 +135,6 @@ async function solveNQUtil(board, col) {
             board[i][col] = 1;
 
             if (await solveNQUtil(board, col + 1) == true) {
-                audioSuccess.play()
                 return true;
             }
 
@@ -143,18 +146,21 @@ async function solveNQUtil(board, col) {
     return false;
 }
 
+
+
  
-function solveNQueen(){
-    if (!isBoardClean) modifyBoard()
-    if(solveNQUtil(board, 0) == false){
-        alert("No existe solución");
-        return false
+async function solveNQueen(){
+    btnSolve.disabled = true;
+    btnClean.disabled = true;
+    Nslider.disabled = true;
+
+    if( await solveNQUtil(board, 0) == false){
+        audioError.play()
+    } else {
+        printSolution(board)
+        audioSuccess.play()
     }
-
-
-    printSolution(board)
-
-    isBoardClean = false
-    
-    return true
+    btnSolve.disabled = false;
+    btnClean.disabled = false;
+    Nslider.disabled = false;
 }
