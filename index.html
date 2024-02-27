@@ -13,22 +13,20 @@
             <h2>¿Cuál es el problema de las N reinas?</h2>
             <p>El problema trata de ubicar un número N de reinas en un tablero de N x N de manera tal que no se ataquen entre
                 sí, es decir, dos reinas no pueden estar en la misma fila, columna o diagonal.</p>
-            <p>En esta página puedes ver como el algoritmo de backtracking intenta encontrar una solución.</p>
-            <p>También haciendo click en los casilleros puedes agregar reinas para intentar encontrar una solución</p>
+            <p>En esta página puedes ver como el algoritmo de backtracking intenta encontrar una solución válida, realizando pruebas y retrocediendo cuando se encuentra una solución inválida. 
+                </p>
 
             <h2>Configuración</h2>  
-            <p>Valor de N</p> 
+            <p id="Nvalue">Valor de N = 4</p>
             <div class="slidecontainer">
                 <input type="range" min="4" max="10" value="4" class="slider" id="Nslider">
             </div>
-            <p id="Nvalue">N = 4</p>
-            <p>Tiempo de animación</p> 
+            <p id="timeValue">Tiempo de animación = 200ms</p> 
             <div class="slidecontainer">
                 <input type="range" min="10" max="1000" value="300" class="slider" id="timeSlider">
             </div>
-            <p id="timeValue">Time = 300ms</p>
+            <br>
             <input id="solve" type="button" value="Resolver" onclick="solveNQueen()" />
-            <input id="clean" type="button" value="Limpiar tablero" onclick="modifyBoard()" />
 
         </div>
         

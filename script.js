@@ -2,7 +2,6 @@ let N = 4
 let board = [];
 let boardElement = document.getElementById("board");
 let btnSolve = document.getElementById("solve");
-let btnClean = document.getElementById("clean");
 isBoardClean = true
 isSolving = false
 animationTime = 200
@@ -10,7 +9,12 @@ var audioSuccess = new Audio('./media/success.mp3'); //Sound Effect from Pixabay
 var audioError = new Audio('./media/error.wav');
 
 
+//Default status
+modifyGrid()
+modifyBoard()
 
+
+//board related
 function modifyBoard(){
     boardElement.textContent = ''
     board = []
@@ -20,9 +24,6 @@ function modifyBoard(){
             var cell = {};
             cell.element = document.createElement("div")
             cell.element.id = y*N + x; 
-            cell.element.addEventListener('click', function() {
-                cellClicked(this.id)
-            });
             if(y%2 ==  x%2)
             {
                 cell.element.className = "white";
@@ -38,16 +39,14 @@ function modifyBoard(){
     }
 }
 
-function cellClicked(id){
-    cell = document.getElementById(id)
-    if (cell.textContent == "") {
-        cell.style.color = "#FF0000"
-        cell.textContent = "\u265B"
-        board[Math.floor(id/N)][id%N] = 1
-    } else {
-        cell.style.color = ""
-        cell.textContent = ""
-        board[Math.floor(id/N)][id%N] = 0
+function cleanBoard() {
+    for(var y = 0; y < N; y++){
+        for(var x = 0; x < N; x++){
+            board[x][y] = 0;
+            let cell = document.getElementById(y*N + x)
+            cell.innerText = ""
+            cell.style.color = ""
+        }
     }
 }
 
@@ -58,34 +57,33 @@ function modifyGrid() {
     boardElement.style.fontSize = size/N + "px"
 }
 
+addEventListener("resize", (event) => {});
+onresize = (event) => {modifyGrid()};
+
+
+
+//Sliders
 var Nslider = document.getElementById("Nslider");
 var Noutput = document.getElementById("Nvalue");
 
 var timeSlider = document.getElementById("timeSlider");
 var timeOutput = document.getElementById("timeValue");
 
-
 Nslider.oninput = function() {
-Noutput.textContent = "N = " + this.value
+Noutput.textContent = "Valor de N = " + this.value
   N = this.value
   modifyGrid()
   modifyBoard()
 }
 
 timeSlider.oninput = function() {
-    timeOutput.textContent = "Time = " + this.value + "ms"
+    timeOutput.textContent = "Tiempo de animación = " + this.value + "ms"
     animationTime = this.value
-  }
-
-//Default status
-modifyGrid()
-modifyBoard()
- 
-addEventListener("resize", (event) => {});
-
-onresize = (event) => {modifyGrid()};
+}
 
 
+
+//Solution related
 function printSolution(board)
 {
     for(let i = 0; i < N; i++)
@@ -127,9 +125,9 @@ async function solveNQUtil(board, col) {
         return true;
 
     for (let i = 0; i < N; i++) {
-        let test = document.getElementById(i * N + col);
-        test.textContent = "\u265B";
-        await sleep(animationTime); // Espera 1 segundo antes de continuar
+        let cell = document.getElementById(i * N + col);
+        cell.textContent = "\u265B";
+        await sleep(animationTime);
 
         if (isSafe(board, i, col) == true) {
             board[i][col] = 1;
@@ -141,18 +139,17 @@ async function solveNQUtil(board, col) {
             board[i][col] = 0;
         }
         
-        test.textContent = " ";
+        cell.textContent = " ";
     }
     return false;
 }
 
 
-
- 
 async function solveNQueen(){
+    cleanBoard()
     btnSolve.disabled = true;
-    btnClean.disabled = true;
     Nslider.disabled = true;
+    Noutput.textContent = "Valor de N no modificable durante ejecución"
 
     if( await solveNQUtil(board, 0) == false){
         audioError.play()
@@ -160,7 +157,8 @@ async function solveNQueen(){
         printSolution(board)
         audioSuccess.play()
     }
+
     btnSolve.disabled = false;
-    btnClean.disabled = false;
     Nslider.disabled = false;
+    Noutput.textContent = "Valor de N = " + N
 }
