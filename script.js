@@ -10,7 +10,6 @@ var audioError = new Audio('./media/error.wav');
 
 
 //Default status
-modifyGrid()
 modifyBoard()
 
 
@@ -37,6 +36,7 @@ function modifyBoard(){
         }
         board.push(row)
     }
+    modifyGrid()
 }
 
 function cleanBoard() {
@@ -51,14 +51,28 @@ function cleanBoard() {
 }
 
 function modifyGrid() {
-    let size = boardElement.offsetWidth - 6
-    boardElement.style.gridTemplateColumns = "repeat("+ N +", " + size/N + "px)" 
-    boardElement.style.gridTemplateRows = "repeat("+ N +", " + size/N + "px)" 
-    boardElement.style.fontSize = size/N + "px"
+    boardElement.style.gridTemplateColumns = "repeat("+ N +", 1fr)"
+    boardElement.style.gridTemplateRows = "repeat("+ N +", 1fr)" 
 }
 
 addEventListener("resize", (event) => {});
-onresize = (event) => {modifyGrid()};
+onresize = (event) => {adjustFontSize()};
+
+function adjustFontSize() {
+    var contenedor = document.getElementById(0);
+    var fontSize = contenedor.offsetWidth / 1.5 ; // ajusta según sea necesario
+    boardElement.style.fontSize = fontSize + 'px';
+}
+  
+window.onresize = function() {
+    adjustFontSize(); // Ajustar el tamaño de la fuente cuando se cambie el tamaño del div
+};
+
+window.onload = function() {
+    adjustFontSize(); // Ajustar el tamaño de la fuente inicialmente
+  };
+  
+  
 
 
 
@@ -121,6 +135,7 @@ function sleep(ms) {
 }
 
 async function solveNQUtil(board, col) {
+    adjustFontSize()
     if (col >= N)
         return true;
 
