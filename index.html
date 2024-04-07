@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página dedicada a ver como se soluciona por backtraking el problema de las N reinas.">
     <title>El Problema de las N Reinas</title>
     <link rel="icon" type="image/x-icon" href="./media/queen.ico">
     <link rel="stylesheet" href="style.css">
@@ -10,27 +11,32 @@
 <body>
     <div class="grid-container">
 
-        <div>
-            <h2>¿Cuál es el problema de las N reinas?</h2>
-            <p>El problema trata de ubicar un número N de reinas en un tablero de N x N de manera tal que no se ataquen entre
-                sí, es decir, dos reinas no pueden estar en la misma fila, columna o diagonal.</p>
-            <p>En esta página puedes ver como el algoritmo de backtracking intenta encontrar una solución válida, realizando pruebas y retrocediendo cuando se encuentra una solución inválida. 
+        <div class="panel">
+            <div class="panel-text">
+                <h2>¿Cuál es el problema de las N reinas?</h2>
+                <p>El problema trata de ubicar un número N de reinas en un tablero de N x N de manera tal que no se ataquen entre
+                    sí, es decir, dos reinas no pueden estar en la misma fila, columna o diagonal.</p>
+                <p>En esta página puedes ver como el algoritmo de backtracking intenta encontrar una solución válida, 
+                    realizando pruebas y retrocediendo cuando se encuentra con una solución inválida. 
                 </p>
+            </div>
 
-                <div>
-                    <h2>Configuración</h2>  
-                    <p id="Nvalue">Valor de N = 4</p>
-                    <div class="slidecontainer">
-                        <input type="range" min="4" max="10" value="4" class="slider" id="Nslider">
-                    </div>
-                    <p id="timeValue">Tiempo de animación = 200ms</p> 
-                    <div class="slidecontainer">
-                        <input type="range" min="10" max="1000" value="300" class="slider" id="timeSlider">
-                    </div>
-                    <br>
-                    <input id="solve" type="button" value="Resolver" onclick="solveNQueen()" />
-                    <input id="solve" type="button" value="Detener" onclick="" />
+            <div class="panel-config">
+                <h2>Configuración</h2>  
+                <div class="slidecontainer">
+                    <label id="Nvalue" for="Nslider">Valor de N = 4</label> 
+                    <input type="range" min="4" max="10" value="4" class="slider" id="Nslider">
                 </div>
+                <div class="slidecontainer">
+                    <label id="timeValue" for="timeSlider">Tiempo de animación = 200ms</label> 
+                    <input type="range" min="10" max="1000" value="300" class="slider" id="timeSlider">
+                </div>
+                <br>
+                <input id="solve" type="button" value="Resolver" onclick="solveNQueen()" />
+                <input id="next" type="button" value="Buscar siguiente" onclick="" />
+                <input id="clean" type="button" value="Limpiar Tablero" onclick="" />
+                <input id="stop" type="button" value="Detener" onclick="" />
+            </div>
         </div>
         
         <div id="board" class="boardCont">

@@ -2,10 +2,34 @@ body{
   font-family: Helvetica, Arial, sans-serif;
   margin: 0;
   height: 100vh;
-  overflow: hidden
+  background-color: #dbfff3;
+}
+
+.panel{
+  padding: 16px 8px;
+}
+
+.panel-text{
+  margin-bottom: 8px;
+  padding: 00px 8px;
+  background-color: #ffffff; /*#a7ffe2;*/
+  border: 3px solid #04AA6D;
+  border-radius: 5px;
+}
+
+.panel-config {
+  background-color: #ffffff; /*#a7ffe2;*/
+  padding: 0px 8px 8px 8px;
+  border: 3px solid #04AA6D;
+  border-radius: 5px;
+}
+
+.panel-config > div:first-of-type{
+  margin-bottom: 10px;
 }
 
 .boardCont {
+  border: 1px solid black;
   aspect-ratio: 1;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -25,15 +49,10 @@ body{
 
 .grid-container{
   height: 100%;
-  background: lightsalmon;
   display: grid;
   box-sizing: border-box;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   column-gap: 16px;
-}
-
-.grid-container > div{
-  background: lightblue;
 }
 
 
@@ -57,7 +76,7 @@ body{
   -webkit-appearance: none;  /* Override default CSS styles */
   appearance: none;
   width: 99%; /* Full-width */
-  max-width: 800px;
+  max-width: 900px;
   height: 25px; /* Specified height */
   background: #d3d3d3; /* Grey background */
   outline: none; /* Remove outline */
