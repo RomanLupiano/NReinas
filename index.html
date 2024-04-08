@@ -21,6 +21,11 @@
                 </p>
             </div>
 
+            <table>
+                
+            </table>
+            
+
             <div class="panel-config">
                 <h2>Configuración</h2>  
                 <div class="slidecontainer">
@@ -28,14 +33,15 @@
                     <input type="range" min="4" max="10" value="4" class="slider" id="Nslider">
                 </div>
                 <div class="slidecontainer">
-                    <label id="timeValue" for="timeSlider">Tiempo de animación = 200ms</label> 
+                    <label id="timeValue" for="timeSlider">Tiempo de animación = 300ms</label> 
                     <input type="range" min="10" max="1000" value="300" class="slider" id="timeSlider">
                 </div>
                 <br>
                 <input id="solve" type="button" value="Resolver" onclick="solveNQueen()" />
-                <input id="next" type="button" value="Buscar siguiente" onclick="" />
-                <input id="clean" type="button" value="Limpiar Tablero" onclick="" />
-                <input id="stop" type="button" value="Detener" onclick="" />
+                <input id="stop" type="button" value="Detener" onclick="setCanContinue()" hidden/>
+                <input id="cancel" type="button" value="Cancelar búsqueda" onclick="" hidden/>
+                <input id="next" type="button" value="Buscar siguiente" onclick="" hidden/>
+                <input id="clean" type="button" value="Limpiar Tablero" onclick="cleanBoard()" />
             </div>
         </div>
         
