@@ -231,9 +231,13 @@ function paintBoardQueens() {
 
 function paintQueenAttack(i, j) {
     for (let index = 0; index < N; index++) {
+        if ((index * N + j) == (i * N + j))
+            continue
         cell = document.getElementById(index * N + j)
         paintCell(cell, lightRed, red)
     
+        if ((i * N + index) == (i * N + j))
+            continue
         cell = document.getElementById(i * N + index)
         paintCell(cell, lightRed, red)
     }
