@@ -64,9 +64,6 @@ function modifyGrid() {
     boardElement.style.gridTemplateRows = "repeat("+ N +", 1fr)" 
 }
 
-addEventListener("resize", (event) => {});
-onresize = (event) => {adjustFontSize()};
-
 function adjustFontSize() {
     var contenedor = document.getElementById(0);
     var fontSize = contenedor.offsetWidth / 1.5 ; // ajusta según sea necesario
@@ -188,7 +185,7 @@ function paintCell(cell, x , y) {
 
 
 function calcularColor(cell) {
-    let factor = 0.020;
+    let factor = 0.04;
     backgroundColor = cell.style.backgroundColor
     
     let matches = backgroundColor.match(/\d+/g);
@@ -238,38 +235,6 @@ function waitFor(conditionFunction) {
   
     return new Promise(poll);
 }
-/*
-async function solveNQUtil(board, col) {
-    if (col >= N){
-        solutionReached();
-        return true;
-    }
-
-
-    for (let i = 0; i < N; i++) {
-        let cell = document.getElementById(i * N + col);
-        cell.textContent = "\u265B";
-        await waitFor(_ => canContinue === true);
-        await sleep(animationTime);
-
-        if (isSafe(board, i, col) == true) {
-            board[i][col] = 1;
-            paintBoardQueens()
-            
-            if (await solveNQUtil(board, col + 1) == true) {
-                return true;
-            }
-
-            board[i][col] = 0;
-            paintBoard()
-            paintBoardQueens()
-        }
-        
-        await waitFor(_ => canContinue === true);
-        cell.textContent = "";
-    }
-    return false;
-}*/
 
 async function solveNQUtil(board, col) {
     if (col == N){
