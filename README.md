@@ -1,7 +1,7 @@
 # N Reinas
 
 Este proyecto está dedicado a visualizar cómo se busca una solución al problema de las N reinas.  
-<a href="https://romanlupiano.github.io/NReinas/" target="_blank">Podés visitar la página acá.</a>
+<a href="https://romanlupiano.github.io/NReinas/">Podés visitar la página acá.</a>
 
 
 

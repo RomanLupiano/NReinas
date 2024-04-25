@@ -43,17 +43,19 @@
                 <input id="cancel" type="button" value="Cancelar búsqueda" onclick="calcelSearch()" hidden/>
             </div>
 
-            <div class="panel-attack" hidden>
-                <input type="checkbox" id="seeAttack"> 
+            <div class="panel-attack">
+                <input type="checkbox" id="sound" checked onclick="setSound()"> 
+                <label for="sound">Sonido</label>
+                <br>
+                <input type="checkbox" id="seeAttack" checked onclick="setAttack()"> 
                 <label for="seeAttack">Visualizar el ataque de las reinas</label>
                 <br>
-                <input type="checkbox" id="Agregative"> 
-                <label for="Agregative">Ver casillas más atacadas*</label>
-                <br>
-                <input type="checkbox" id="count"> 
-                <label for="count">Ver cantidad de veces que una casilla está siendo atacada (Beta)</label>
+                <div id="contAgregative">
+                    <input type="checkbox" id="Agregative" onclick="setAgregative()"> 
+                    <label for="Agregative">Ver casillas más atacadas</label>
+                    <p>Mientras más oscuro sea el rojo de una casilla significa que más reinas están atacando esa misma casilla</p>
+                </div>
 
-                <p>* Mientras más oscuro sea el rojo de una casilla significa que más reinas están atacando esa misma casilla</p>
             </div>
         </div>
         

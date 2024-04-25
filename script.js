@@ -1,27 +1,45 @@
 let N = 4
+let animationTime = 300;
+let fontSizeFactor = 0.6;
 let board = [];
-let boardElement = document.getElementById("board");
+const boardElement = document.getElementById("board");
 
-let btnSolve = document.getElementById("solve");
-let btnStop = document.getElementById("stop");
-let btnCancel = document.getElementById("cancel");
-let btnNext = document.getElementById("next");
+const btnSolve = document.getElementById("solve");
+const btnStop = document.getElementById("stop");
+const btnCancel = document.getElementById("cancel");
+const btnNext = document.getElementById("next");
+const divAgregative = document.getElementById("contAgregative");
+
+const Nslider = document.getElementById("Nslider");
+const Noutput = document.getElementById("Nvalue");
+
+const timeSlider = document.getElementById("timeSlider");
+const timeOutput = document.getElementById("timeValue");
 
 let seekNextSolution = false;
-let isBoardClean = true
-let isSolving = false
-let canContinue = true
-let animationTime = 300
-var audioSuccess = new Audio('./media/success.mp3'); //Sound Effect from Pixabay
-var audioError = new Audio('./media/error.wav');
+let canContinue = true;
+let cancel = false;
 
-let result = []
+let seeAttack = true;
+let seeAgregative = false;
+
+const white = "#fffefe"
+const green = "#7FFFD4";
+const lightRed = "#ff0000";
+const red = "#ff9999"
+let ColorFactor = 0.2;
+
+let sound = true;
+const audioSuccess = new Audio('./media/success.mp3'); //Sound Effect from Pixabay
+const audioError = new Audio('./media/error.wav');
+
 
 //Default status
-modifyBoard()
+modifyBoard();
 
 
-//board related
+
+//// Board related ////
 function modifyBoard(){
     boardElement.textContent = ''
     board = []
@@ -53,7 +71,6 @@ function cleanBoard() {
             board[x][y] = 0;
             let cell = document.getElementById(y*N + x)
             cell.innerText = ""
-            cell.style.color = ""
         }
     }
     paintBoard()
@@ -65,8 +82,8 @@ function modifyGrid() {
 }
 
 function adjustFontSize() {
-    var contenedor = document.getElementById(0);
-    var fontSize = contenedor.offsetWidth / 1.5 ; // ajusta según sea necesario
+    let contenedor = document.getElementById(0);
+    let fontSize = contenedor.offsetWidth * fontSizeFactor ;
     boardElement.style.fontSize = fontSize + 'px';
 }
   
@@ -78,25 +95,23 @@ window.onload = function() {
     adjustFontSize(); // Ajustar el tamaño de la fuente inicialmente
 };
 
-//Sliders
-var Nslider = document.getElementById("Nslider");
-var Noutput = document.getElementById("Nvalue");
 
-var timeSlider = document.getElementById("timeSlider");
-var timeOutput = document.getElementById("timeValue");
 
+//// Sliders related ////
 Nslider.oninput = function() {
-Noutput.textContent = "Valor de N = " + this.value
-  N = this.value
-  modifyGrid()
-  modifyBoard()
+Noutput.textContent = "Valor de N = " + this.value;
+  N = this.value;
+  modifyBoard();
 }
 
 timeSlider.oninput = function() {
-    timeOutput.textContent = "Tiempo de animación = " + this.value + "ms"
-    animationTime = this.value
+    timeOutput.textContent = "Tiempo de animación = " + this.value + "ms";
+    animationTime = this.value;
 }
 
+
+
+//// Paint realted ////
 function paintBoard() {
     for (let i = 0; i < N; i++) {
         for (let j = 0; j < N; j++) {
@@ -110,7 +125,7 @@ function paintBoard() {
     }
 }
 
-function paintBoardQueens() {
+function paintQueens() {
     for (let i = 0; i < N; i++) {
         for (let j = 0; j < N; j++) {
             if (board[i][j] === 1) paintQueenAttack(i, j)
@@ -118,74 +133,53 @@ function paintBoardQueens() {
     }
 }
 
+function paint(){
+    paintBoard();
+    paintQueens();
+}
+
 function paintQueenAttack(i, j) {
-    for (let index = 0; index < N; index++) {
-        if ((index * N + j) == (i * N + j))
-            continue
-        cell = document.getElementById(index * N + j)
-        paintCell(cell, lightRed, red)
-    }
+    const directions = [
+        [-1, 0], [1, 0], // arriba, abajo
+        [0, -1], [0, 1], // izquierda, derecha
+        [-1, -1], [-1, 1], // diagonal superior izquierda, diagonal superior derecha
+        [1, -1], [1, 1] // diagonal inferior izquierda, diagonal inferior derecha
+    ];
 
-    for (let index = 0; index < N; index++) {
-        if ((i * N + index) == (i * N + j))
-        continue
-        cell = document.getElementById(i * N + index)
-        paintCell(cell, lightRed, red)        
+    for (const [directionx, directiony] of directions) {
+        let x = i + directionx;
+        let y = j + directiony;
+        
+        while (x >= 0 && x < N && y >= 0 && y < N) {
+            const cell = document.getElementById(x * N + y);
+            paintCell(cell);
+            x += directionx;
+            y += directiony;
+        }
     }
-
-    //diagonal inferior izquierda
-    for (x = i+1, y = j-1; y >= 0 && x < N; x++, y--) {
-        cell = document.getElementById(x * N + y)
-        paintCell(cell, lightRed, red)
-    }
-
-    //diagonal inferior derecha
-    for (x = i+1, y = j+1; y < N && x < N; x++, y++) {
-        cell = document.getElementById(x * N + y)
-        paintCell(cell, lightRed, red)
-    }
-
-    //diagonal superior izquierda
-    for (x = i-1, y = j-1; y >= 0 && x >= 0; x--, y--) {
-        cell = document.getElementById(x * N + y)
-        paintCell(cell, lightRed, red)
-    }
-
-    //diagonal superior derecha
-    for (x = i-1, y = j+1; y < N && x >= 0; x--, y++) {
-        cell = document.getElementById(x * N + y)
-        paintCell(cell, lightRed, red)
-    }
-
-    //TODO: mejorar el código del pintado de diagonales.
 }
 
-let white = "#fffefe"
-let lightRed = "#ff0000";
-let red = "#ff9999"
-let green = "#7FFFD4";
+function paintCell(cell) {
+    backgroundColor = cell.style.backgroundColor;
 
-
-function paintCell(cell, x , y) {
-    backgroundColor = cell.style.backgroundColor
+    if (seeAgregative) {
+        let matches = backgroundColor.match(/\d+/g);
+        let g = parseInt(matches[1]);
     
-    let matches = backgroundColor.match(/\d+/g);
-    let r = parseInt(matches[0]);
-    let g = parseInt(matches[1]);
-    let b = parseInt(matches[2]);
-
-    if (g !== 0){
-        cell.style.backgroundColor = "#fffefe"
+        if (g !== 0){
+            cell.style.backgroundColor = "#fffefe";
+        }
+        calcularColor(cell);
+    } else {
+        if (cell.className == "white") {
+            cell.style.backgroundColor = lightRed;
+        } else {
+            cell.style.backgroundColor = red;
+        }
     }
-    calcularColor(cell)
 }
-
-//TODO: Botones de calcelar busqueda y de seguir buscando soluciones
-
-
 
 function calcularColor(cell) {
-    let factor = 0.04;
     backgroundColor = cell.style.backgroundColor
     
     let matches = backgroundColor.match(/\d+/g);
@@ -193,16 +187,11 @@ function calcularColor(cell) {
     let g = parseInt(matches[1]);
     let b = parseInt(matches[2]);
     
-    r = r - Math.round(factor * 255);
+    r = r - Math.round(ColorFactor * 255);
     g = 0;
     b = 0;
 
-    cell.style.backgroundColor = `rgb(${r- Math.round(factor * 255)}, ${g}, ${b})`;
-  }
-  
-function solve() {
-    cleanBoard();
-    solveNQueen();
+    cell.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
 }
  
 function isSafe(board, row, col)
@@ -222,7 +211,11 @@ function isSafe(board, row, col)
  
     return true
 }
- 
+
+
+
+
+//// Solution related ////
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -236,31 +229,39 @@ function waitFor(conditionFunction) {
     return new Promise(poll);
 }
 
-async function solveNQUtil(board, col) {
-    if (col == N){
+async function backtracking(board, col) {
+    if (cancel) {
+        return;
+    }
+
+    if (col == N) {
+        solutionReached();
         return true;
     }
 
     for (let i = 0; i < N; i++) {
+        if (cancel) {
+            return;
+        }
+
         let cell = document.getElementById(i * N + col);
         cell.textContent = "\u265B";
         await waitFor(_ => canContinue === true);
         await sleep(animationTime);
 
+        
         if (isSafe(board, i, col) == true) {
             board[i][col] = 1;
-            paintBoard()
-
-            paintBoardQueens()
+            if (seeAttack) 
+                paint();
             
-            if (await solveNQUtil(board, col + 1) == true) {
-                solutionReached()
-                await waitFor(_ => seekNextSolution === true)
+            if (await backtracking(board, col + 1) == true) {
+                await waitFor(_ => seekNextSolution === true);
             }
 
             board[i][col] = 0;
-            paintBoard()
-            paintBoardQueens()
+            if (seeAttack) 
+                paint();
         }
         
         await waitFor(_ => canContinue === true);
@@ -269,7 +270,32 @@ async function solveNQUtil(board, col) {
     return false;
 }
 
+async function solveNQueen(){
+    adjustFontSize()
+    cancel = false;
+    btnSolve.hidden = true;
+    Nslider.disabled = true;
+    btnStop.hidden = false;
+    Noutput.textContent = "Valor de N no modificable durante ejecución"
+    
+    if(await backtracking(board, 0) == false){
+        playAudio(audioError);
+    }
 
+    cancel = false;
+    btnSolve.hidden = false;
+    Nslider.disabled = false;
+    btnStop.hidden = true;
+    Noutput.textContent = "Valor de N = " + N;
+}
+
+function solve() {
+    cleanBoard();
+    solveNQueen();
+}
+
+
+//// Button realted ////
 async function userInput(){
     if (seekNextSolution){
         seekNextSolution = false;
@@ -285,47 +311,69 @@ async function setCanContinue(){
     } else {
         btnStop.value = "Continuar";
         btnCancel.hidden = false;
+    }
+}
+
+function setAttack(){
+    seeAttack = !seeAttack;
+    if (!seeAttack) {
+        paintBoard();
+        divAgregative.hidden = true;
+    } else {
+        paintQueens();
+        divAgregative.hidden = false;
 
     }
+}
+
+function setAgregative() {
+    seeAgregative = !seeAgregative;
+    if (!seeAgregative) {
+        paintBoard();
+    }
+    paintQueens();
 }
 
 async function setSeekNextSolution(){
     seekNextSolution = !seekNextSolution;
-    btnNext.hidden = true;
-    btnCancel.hidden = true;
-    btnStop.hidden = false;
+    if (seekNextSolution) {
+        btnNext.hidden = true;
+        btnCancel.hidden = true;
+        btnStop.hidden = false;
+    }
 }
 
 function solutionReached() {
-    audioSuccess.play()
+    playAudio(audioSuccess);
     seekNextSolution = false;
+    btnStop.hidden = true;
     btnNext.hidden = false;
     btnCancel.hidden = false;
-    btnStop.hidden = true;
 }
 
-function calcelSearch(){
-    cleanBoard();
+function setSound() {
+    sound = !sound;
+}
+
+async function calcelSearch(){
     btnCancel.hidden = true;
     btnNext.hidden = true;
     btnSolve.hidden = false;
-    Nslider.disabled = false;
-    Noutput.textContent = "Valor de N = " + N;
-}
-
-async function solveNQueen(){
-    adjustFontSize()
-    btnSolve.hidden = true;
-    Nslider.disabled = true;
-    btnStop.hidden = false;
-    Noutput.textContent = "Valor de N no modificable durante ejecución"
-    
-    if(await solveNQUtil(board, 0) == false){
-        audioError.play()
-    }
-
-    btnSolve.hidden = false;
+    btnSolve.disabled = true;
+    btnSolve.value = "Cargando...";
     Nslider.disabled = false;
     btnStop.hidden = true;
+    canContinue = true;
+    cancel = true;
     Noutput.textContent = "Valor de N = " + N;
+    cleanBoard();
+    await sleep(300);
+    btnSolve.value = "Resolver";
+    btnSolve.disabled = false;
+}
+
+function playAudio(audio){
+    if (sound) {
+        audio.play();
+    }
 }
