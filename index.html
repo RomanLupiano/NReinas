@@ -37,11 +37,21 @@
                     <input type="range" min="10" max="1000" value="300" class="slider" id="timeSlider">
                 </div>
                 <br>
-                <input id="solve" type="button" value="Resolver" onclick="solveNQueen()" />
+                <input id="solve" type="button" value="Resolver" onclick="solve()" />
                 <input id="stop" type="button" value="Detener" onclick="setCanContinue()" hidden/>
-                <input id="cancel" type="button" value="Cancelar búsqueda" onclick="" hidden/>
-                <input id="next" type="button" value="Buscar siguiente" onclick="" hidden/>
-                <input id="clean" type="button" value="Limpiar Tablero" onclick="cleanBoard()" />
+                <input id="next" type="button" value="Buscar siguiente solución" onclick="setSeekNextSolution()" hidden/>
+                <input id="cancel" type="button" value="Cancelar búsqueda" onclick="calcelSearch()" hidden/>
+            </div>
+
+            <div class="panel-attack">
+                <input type="checkbox" id="seeAttack"> 
+                <label for="seeAttack">Visualizar el ataque de las reinas</label>
+                <input type="checkbox" id="Agregative"> 
+                <label for="Agregative">Ver casillas más atacadas*</label>
+                <input type="checkbox" id="count"> 
+                <label for="count">Ver cantidad de veces que una casilla está siendo atacada (Beta)</label>
+
+                <p>* Mientras más oscuro sea el rojo de una casilla significa que más reinas están atacando esa misma casilla</p>
             </div>
         </div>
         

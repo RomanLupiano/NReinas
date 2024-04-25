@@ -1,17 +1,21 @@
 let N = 4
 let board = [];
 let boardElement = document.getElementById("board");
+
 let btnSolve = document.getElementById("solve");
 let btnStop = document.getElementById("stop");
-let btnClean = document.getElementById("clean");
 let btnCancel = document.getElementById("cancel");
+let btnNext = document.getElementById("next");
+
+let seekNextSolution = false;
 let isBoardClean = true
 let isSolving = false
 let canContinue = true
-animationTime = 300
+let animationTime = 300
 var audioSuccess = new Audio('./media/success.mp3'); //Sound Effect from Pixabay
 var audioError = new Audio('./media/error.wav');
 
+let result = []
 
 //Default status
 modifyBoard()
@@ -96,21 +100,112 @@ timeSlider.oninput = function() {
     animationTime = this.value
 }
 
-
-
-//Solution related
-function printSolution(board)
-{
-    for(let i = 0; i < N; i++)
-    {
-        for(let j = 0; j < N; j++)
-        {
-            if(board[i][j] == 1){
-                let test = document.getElementById(i*N + j)
-                test.textContent = "\u265B"
+function paintBoard() {
+    for (let i = 0; i < N; i++) {
+        for (let j = 0; j < N; j++) {
+            let cell = document.getElementById(i * N + j);
+            if (cell.className == "white") {
+                cell.style.backgroundColor = white;
+            } else {
+                cell.style.backgroundColor = green;
             }
         }
     }
+}
+
+function paintBoardQueens() {
+    for (let i = 0; i < N; i++) {
+        for (let j = 0; j < N; j++) {
+            if (board[i][j] === 1) paintQueenAttack(i, j)
+        }
+    }
+}
+
+function paintQueenAttack(i, j) {
+    for (let index = 0; index < N; index++) {
+        if ((index * N + j) == (i * N + j))
+            continue
+        cell = document.getElementById(index * N + j)
+        paintCell(cell, lightRed, red)
+    }
+
+    for (let index = 0; index < N; index++) {
+        if ((i * N + index) == (i * N + j))
+        continue
+        cell = document.getElementById(i * N + index)
+        paintCell(cell, lightRed, red)        
+    }
+
+    //diagonal inferior izquierda
+    for (x = i+1, y = j-1; y >= 0 && x < N; x++, y--) {
+        cell = document.getElementById(x * N + y)
+        paintCell(cell, lightRed, red)
+    }
+
+    //diagonal inferior derecha
+    for (x = i+1, y = j+1; y < N && x < N; x++, y++) {
+        cell = document.getElementById(x * N + y)
+        paintCell(cell, lightRed, red)
+    }
+
+    //diagonal superior izquierda
+    for (x = i-1, y = j-1; y >= 0 && x >= 0; x--, y--) {
+        cell = document.getElementById(x * N + y)
+        paintCell(cell, lightRed, red)
+    }
+
+    //diagonal superior derecha
+    for (x = i-1, y = j+1; y < N && x >= 0; x--, y++) {
+        cell = document.getElementById(x * N + y)
+        paintCell(cell, lightRed, red)
+    }
+
+    //TODO: mejorar el código del pintado de diagonales.
+}
+
+let white = "#fffefe"
+let lightRed = "#ff0000";
+let red = "#ff9999"
+let green = "#7FFFD4";
+
+
+function paintCell(cell, x , y) {
+    backgroundColor = cell.style.backgroundColor
+    
+    let matches = backgroundColor.match(/\d+/g);
+    let r = parseInt(matches[0]);
+    let g = parseInt(matches[1]);
+    let b = parseInt(matches[2]);
+
+    if (g !== 0){
+        cell.style.backgroundColor = "#fffefe"
+    }
+    calcularColor(cell)
+}
+
+//TODO: Botones de calcelar busqueda y de seguir buscando soluciones
+
+
+
+function calcularColor(cell) {
+    let factor = 0.020;
+    backgroundColor = cell.style.backgroundColor
+    
+    let matches = backgroundColor.match(/\d+/g);
+    let r = parseInt(matches[0]);
+    let g = parseInt(matches[1]);
+    let b = parseInt(matches[2]);
+    
+    r = r - Math.round(factor * 255);
+    g = 0;
+    b = 0;
+
+    cell.style.backgroundColor = `rgb(${r- Math.round(factor * 255)}, ${g}, ${b})`;
+  }
+  
+function solve() {
+    cleanBoard();
+    solveNQueen();
 }
  
 function isSafe(board, row, col)
@@ -143,11 +238,13 @@ function waitFor(conditionFunction) {
   
     return new Promise(poll);
 }
-
+/*
 async function solveNQUtil(board, col) {
-    adjustFontSize()
-    if (col >= N)
+    if (col >= N){
+        solutionReached();
         return true;
+    }
+
 
     for (let i = 0; i < N; i++) {
         let cell = document.getElementById(i * N + col);
@@ -172,114 +269,98 @@ async function solveNQUtil(board, col) {
         cell.textContent = "";
     }
     return false;
+}*/
+
+async function solveNQUtil(board, col) {
+    if (col == N){
+        return true;
+    }
+
+    for (let i = 0; i < N; i++) {
+        let cell = document.getElementById(i * N + col);
+        cell.textContent = "\u265B";
+        await waitFor(_ => canContinue === true);
+        await sleep(animationTime);
+
+        if (isSafe(board, i, col) == true) {
+            board[i][col] = 1;
+            paintBoard()
+
+            paintBoardQueens()
+            
+            if (await solveNQUtil(board, col + 1) == true) {
+                solutionReached()
+                await waitFor(_ => seekNextSolution === true)
+            }
+
+            board[i][col] = 0;
+            paintBoard()
+            paintBoardQueens()
+        }
+        
+        await waitFor(_ => canContinue === true);
+        cell.textContent = "";
+    }
+    return false;
+}
+
+
+async function userInput(){
+    if (seekNextSolution){
+        seekNextSolution = false;
+        return true;
+    }
 }
 
 async function setCanContinue(){
     canContinue = !canContinue;
     if (canContinue) {
         btnStop.value = "Detener";
-        //btnCancel.hidden = true;
+        btnCancel.hidden = true;
     } else {
         btnStop.value = "Continuar";
-        //btnCancel.hidden = false;
+        btnCancel.hidden = false;
 
     }
+}
+
+async function setSeekNextSolution(){
+    seekNextSolution = !seekNextSolution;
+    btnNext.hidden = true;
+    btnCancel.hidden = true;
+    btnStop.hidden = false;
+}
+
+function solutionReached() {
+    audioSuccess.play()
+    seekNextSolution = false;
+    btnNext.hidden = false;
+    btnCancel.hidden = false;
+    btnStop.hidden = true;
+}
+
+function calcelSearch(){
+    cleanBoard();
+    btnCancel.hidden = true;
+    btnNext.hidden = true;
+    btnSolve.hidden = false;
+    Nslider.disabled = false;
+    Noutput.textContent = "Valor de N = " + N;
 }
 
 async function solveNQueen(){
-    cleanBoard()
-    btnSolve.disabled = true;
-    btnSolve.value = "Resolviendo..."
+    adjustFontSize()
+    btnSolve.hidden = true;
     Nslider.disabled = true;
     btnStop.hidden = false;
-    btnClean.hidden = true;
     Noutput.textContent = "Valor de N no modificable durante ejecución"
     
-    if( await solveNQUtil(board, 0) == false){
+    if(await solveNQUtil(board, 0) == false){
         audioError.play()
-    } else {
-        printSolution(board)
-        audioSuccess.play()
     }
 
-
-
-    btnSolve.disabled = false;
-    btnSolve.value = "Resolver"
+    btnSolve.hidden = false;
     Nslider.disabled = false;
     btnStop.hidden = true;
-    btnClean.hidden = false;
-    Noutput.textContent = "Valor de N = " + N
+    Noutput.textContent = "Valor de N = " + N;
 }
-
-function paintBoard() {
-    for (let i = 0; i < N; i++) {
-        for (let j = 0; j < N; j++) {
-            let cell = document.getElementById(i * N + j);
-            paintCell(cell, "white", green);
-        }
-    }
-}
-
-function paintBoardQueens() {
-    for (let i = 0; i < N; i++) {
-        for (let j = 0; j < N; j++) {
-            if (board[i][j] === 1) paintQueenAttack(i, j)
-        }
-    }
-}
-
-function paintQueenAttack(i, j) {
-    for (let index = 0; index < N; index++) {
-        if ((index * N + j) == (i * N + j))
-            continue
-        cell = document.getElementById(index * N + j)
-        paintCell(cell, lightRed, red)
-    
-        if ((i * N + index) == (i * N + j))
-            continue
-        cell = document.getElementById(i * N + index)
-        paintCell(cell, lightRed, red)
-    }
-
-    //diagonal inferior izquierda
-    for (x = i+1, y = j-1; y >= 0 && x < N; x++, y--) {
-        cell = document.getElementById(x * N + y)
-        paintCell(cell, lightRed, red)
-    }
-
-    //diagonal inferior derecha
-    for (x = i+1, y = j+1; y < N && x < N; x++, y++) {
-        cell = document.getElementById(x * N + y)
-        paintCell(cell, lightRed, red)
-    }
-
-    //diagonal superior izquierda
-    for (x = i-1, y = j-1; y >= 0 && x >= 0; x--, y--) {
-        cell = document.getElementById(x * N + y)
-        paintCell(cell, lightRed, red)
-    }
-
-    //diagonal superior derecha
-    for (x = i-1, y = j+1; y < N && x >= 0; x--, y++) {
-        cell = document.getElementById(x * N + y)
-        paintCell(cell, lightRed, red)
-    }
-
-    //TODO: mejorar el código del pintado de diagonales.
-}
-
-let lightRed = "#ff0000";
-let red = "#ff9999"
-let green = "#7FFFD4";
-
-
-function paintCell(cell, colForWhite, colForBlack) {
-    if (cell.className == "white") {
-        cell.style.backgroundColor = colForWhite;
-    } else {
-        cell.style.backgroundColor = colForBlack;
-    }
-}
-
-//TODO: Botones de calcelar busqueda y de seguir buscando soluciones
