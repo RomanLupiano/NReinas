@@ -363,7 +363,10 @@ async function calcelSearch(){
     btnSolve.value = "Cargando...";
     Nslider.disabled = false;
     btnStop.hidden = true;
+<<<<<<< HEAD
     btnStop.value = "Detener";
+=======
+>>>>>>> 1bda56f073171ea9d52b2c06812aca93d3ccb329
     canContinue = true;
     cancel = true;
     Noutput.textContent = "Valor de N = " + N;
