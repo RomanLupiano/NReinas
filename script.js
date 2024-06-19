@@ -9,6 +9,8 @@ const btnStop = document.getElementById("stop");
 const btnCancel = document.getElementById("cancel");
 const btnNext = document.getElementById("next");
 const divAgregative = document.getElementById("contAgregative");
+const textAgregative = document.getElementById("textAgregative");
+
 
 const Nslider = document.getElementById("Nslider");
 const Noutput = document.getElementById("Nvalue");
@@ -21,7 +23,7 @@ let canContinue = true;
 let cancel = false;
 
 let seeAttack = true;
-let seeAgregative = false;
+let seeAgregative = true;
 
 const white = "#fffefe"
 const green = "#7FFFD4";
@@ -328,6 +330,7 @@ function setAttack(){
 
 function setAgregative() {
     seeAgregative = !seeAgregative;
+    textAgregative.hidden = !textAgregative.hidden
     if (!seeAgregative) {
         paintBoard();
     }
